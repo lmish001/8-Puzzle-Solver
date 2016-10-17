@@ -7,7 +7,7 @@ public class Search {
 
     Node initialState;
     int[] goalState = {1, 2, 3, 4, 5, 6, 7, 8, 0};
-    int N = (int) Math.sqrt(goalState.length);
+    int boardSize = (int) Math.sqrt(goalState.length);
     int numberExpandedNodes = 0;
     int maxQueueNodes = 0;
     int depth = 0;
@@ -27,19 +27,18 @@ public class Search {
         return false;
     }
 
-    public boolean aStar(String heuristic) {
+    public void aStar(String heuristic) {
 
         if (isSolvable(initialState.getState())) {
-            //    System.out.print(isSolvable(initialState.getState()));
-            boolean solved = false;
-            int cost;
-            ArrayList<int[]> visitedNodes = new ArrayList<int[]>();
-            List<int[]> newNodes = new ArrayList<int[]>();
+
+
+            List<int[]> visitedNodes = new ArrayList<>();
+            List<int[]> newNodes;
             Comparator<Node> queueComparator = new NodeCostComparator();
-            PriorityQueue<Node> priorityQueue = new PriorityQueue<Node>(10, queueComparator);
+            PriorityQueue<Node> priorityQueue = new PriorityQueue<>(10, queueComparator);
 
             Node currentNode = initialState;
-            //    System.out.println(Arrays.equals(currentNode.getState(),goalState));
+
 
 
             while (!Arrays.equals(currentNode.getState(), goalState)) {
@@ -72,7 +71,7 @@ public class Search {
 
                         if (heuristic.equals(Heuristic.MANHATTAN)) {
 
-                            childNode.setCost(Heuristic.ManhattanDistance(childNode.getState(), N));
+                            childNode.setCost(Heuristic.ManhattanDistance(childNode.getState(), boardSize));
                             priorityQueue.add(childNode);
 
                         }
@@ -84,51 +83,26 @@ public class Search {
                 }
 
                 if (priorityQueue.size() > maxQueueNodes) {
-                    System.out.println("Queue size: " + priorityQueue.size());
                     maxQueueNodes = priorityQueue.size();
 
                 }
 
                 currentNode = priorityQueue.poll();
-
-
-                printCurrentState(currentNode.getState(), currentNode.getCost());
+                PrintResult.printCurrentState(currentNode.getState(), currentNode.getCost(), boardSize);
 
 
             }
 
             System.out.println("Goal!!!");
-            printResult(numberExpandedNodes, maxQueueNodes, depth);
-            return solved;
-        }
-        return false;
+            PrintResult.printResult(numberExpandedNodes, maxQueueNodes, depth);
 
-    }
-
-
-    public void printCurrentState(int[] currentState, int cost) {
-
-        System.out.println("The best state to expand with a g(n) = 1 and h(n) = " + cost + " is…");
-
-        //currentState.replace("0", " ");
-
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                System.out.print(currentState[j + (i * N)] + " ");
-            }
-            System.out.println();
         }
 
-        System.out.println();
-    }
-
-    public void printResult(int nodes, int queue, int depth) {
-
-        System.out.println("To solve this problem the search algorithm expanded a total of " + nodes + " nodes.");
-        System.out.println("The maximum number of nodes in the queue at any one time was " + queue);
-        System.out.println("The depth of the goal node was " + depth);
 
     }
+
+
+
 
     public static boolean isSolvable(int[] state) {
 

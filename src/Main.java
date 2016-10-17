@@ -11,7 +11,6 @@ public class Main {
 
         search.aStar(Heuristic.MANHATTAN);
         search.aStar(Heuristic.MISPLACEDTILE);
-        search.aStar(null);
 
     }
 

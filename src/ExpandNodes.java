@@ -9,8 +9,8 @@ public class ExpandNodes {
 
     public static List<int[]> expandNodes(int[] currentState) {
 
-        List<int[]> newNodes = new ArrayList<int[]>();
-        int[] newState = new int[currentState.length];
+        List<int[]> newNodes = new ArrayList<>();
+        int[] newState;
 
 
         int i = getIndex(currentState, 0);
