@@ -3,22 +3,22 @@
  */
 public class Node {
 
-    int [] state;
+    int[] state;
     int cost;
 
-    public Node (int[] state){
+    public Node(int[] state) {
         this.state = state;
     }
 
-    public int[] getState(){
+    public int[] getState() {
         return state;
     }
 
-    public int getCost(){
+    public int getCost() {
         return cost;
     }
 
-    public void setCost (int cost) {
+    public void setCost(int cost) {
         this.cost = cost;
     }
 }

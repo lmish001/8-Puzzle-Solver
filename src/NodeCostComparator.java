@@ -6,7 +6,7 @@ import java.util.Comparator;
 class NodeCostComparator implements Comparator<Node> {
 
     @Override
-    public int compare (Node cost1, Node cost2) {
+    public int compare(Node cost1, Node cost2) {
         if (cost1.getCost() > cost2.getCost()) {
             return 1;
         } else if (cost1.getCost() < cost2.getCost()) {
