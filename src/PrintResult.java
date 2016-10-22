@@ -3,9 +3,9 @@
  */
 public class PrintResult {
 
-    public static void printCurrentState(int[] currentState, int cost, int boardSize) {
+    public static void printCurrentState(int[] currentState, int gcost, int hcost, int boardSize) {
 
-        System.out.println("The best state to expand with a g(n) = 1 and h(n) = " + cost + " is…");
+        System.out.println("The best state to expand with a g(n) = " + gcost + " and h(n) = " + hcost + " is…");
 
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {

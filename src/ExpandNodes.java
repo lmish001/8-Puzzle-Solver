@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -11,28 +10,29 @@ public class ExpandNodes {
 
         List<int[]> newNodes = new ArrayList<>();
         int[] newState;
+        int boardSize = (int) Math.sqrt(currentState.length);
 
 
         int i = getIndex(currentState, 0);
 
-        System.out.println(i);
-        if (i != 0 && i != 3 && i != 6) {  // Move the blank left
+
+        if (i % boardSize != 0) {  // Move the blank left
             newState = swap(currentState, i, i - 1);
             newNodes.add(newState);
         }
 
-        if (i != 2 && i != 5 && i != 8) { //Move blank to the right
+        if (i % boardSize != boardSize - 1) { //Move blank to the right
 
             newState = swap(currentState, i, i + 1);
             newNodes.add(newState);
         }
 
-        if (2 < i && i < 9) { //Move blank up
+        if (Math.floorDiv(i, boardSize) != 0) { //Move blank up
             newState = swap(currentState, i, i - 3);
             newNodes.add(newState);
         }
 
-        if (i < 6) { //Move blank down
+        if (Math.floorDiv(i, boardSize) != boardSize - 1) { //Move blank down
             newState = swap(currentState, i, i + 3);
             newNodes.add(newState);
         }
