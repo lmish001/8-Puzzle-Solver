@@ -9,7 +9,7 @@ public class PrintResult {
 
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
-                System.out.print(currentState[j + (i * boardSize)] + " ");
+                System.out.print(currentState[j + (i * boardSize)] + "\t");
             }
             System.out.println();
         }

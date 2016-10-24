@@ -6,14 +6,16 @@ import java.util.*;
 public class Search {
 
     public Node initialState;
-    private int[] goalState = {1, 2, 3, 4, 5, 6, 7, 8, 0};
-    private int boardSize = (int) Math.sqrt(goalState.length);
+    private int[] goalState;
+    private int boardSize;
     private int numberExpandedNodes = 0;
     private int maxQueueNodes = 0;
 
     public Search(Node initialState) {
 
         this.initialState = initialState;
+        boardSize = (int) Math.sqrt(initialState.getState().length);
+        setGoalState();
     }
 
 
@@ -156,8 +158,6 @@ public class Search {
 
         }
 
-        System.out.println(blankRow);
-        System.out.println(boardSize);
 
         if (boardSize % 2 != 0 && inversion % 2 != 0) {
             System.out.print("The problem is not solvable");
@@ -188,5 +188,26 @@ public class Search {
         }
         ;
         return depth;
+    }
+
+    public void setGoalState() {
+
+
+        switch (boardSize) {
+            case 3:
+                goalState = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 0};
+                break;
+            case 4:
+                goalState = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0};
+                break;
+            case 5:
+                goalState = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0};
+                break;
+            default:
+                System.out.println("Goal state not available");
+                break;
+        }
+
+
     }
 }

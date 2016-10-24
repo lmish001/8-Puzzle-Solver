@@ -11,28 +11,29 @@ public class ExpandNodes {
         List<int[]> newNodes = new ArrayList<>();
         int[] newState;
         int boardSize = (int) Math.sqrt(currentState.length);
-
-
         int i = getIndex(currentState, 0);
 
+        int row = Math.floorDiv(i, boardSize);
+        int column = i % boardSize;
 
-        if (i % boardSize != 0) {  // Move the blank left
+
+        if (column != 0) {  // Move the blank left
             newState = swap(currentState, i, i - 1);
             newNodes.add(newState);
         }
 
-        if (i % boardSize != boardSize - 1) { //Move blank to the right
+        if (column != boardSize - 1) { //Move blank to the right
 
             newState = swap(currentState, i, i + 1);
             newNodes.add(newState);
         }
 
-        if (Math.floorDiv(i, boardSize) != 0) { //Move blank up
+        if (row != 0) { //Move blank up
             newState = swap(currentState, i, i - 3);
             newNodes.add(newState);
         }
 
-        if (Math.floorDiv(i, boardSize) != boardSize - 1) { //Move blank down
+        if (row != boardSize - 1) { //Move blank down
             newState = swap(currentState, i, i + 3);
             newNodes.add(newState);
         }
