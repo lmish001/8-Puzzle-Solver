@@ -3,14 +3,13 @@
  */
 public class Heuristic {
 
-
     public static final String MISPLACEDTILE = "Misplaced tile";
     public static final String MANHATTAN = "Manhattan distance";
-
 
     public static int MisplacedTile(int[] state) {
 
         int totalCost = 0;
+
         for (int i = 0; i < state.length - 1; i++) {
             if (i + 1 != state[i] && state[i] != 0) {
                 totalCost += 1;
@@ -18,9 +17,7 @@ public class Heuristic {
         }
 
         return totalCost;
-
     }
-
 
     public static int ManhattanDistance(int[] state, int boardSize) {
 
@@ -45,16 +42,11 @@ public class Heuristic {
                     int disx = i - posx;
                     int disy = j - posy;
                     totalCost += Math.abs(disx) + Math.abs(disy);
-
                 }
-
-
             }
         }
 
         return totalCost;
-
     }
-
 
 }

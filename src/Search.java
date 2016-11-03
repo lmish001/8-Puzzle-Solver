@@ -3,6 +3,7 @@ import java.util.*;
 /**
  * Created by eldgb on 15-Oct-16.
  */
+
 public class Search {
 
     public Node initialState;
@@ -18,196 +19,191 @@ public class Search {
         setGoalState();
     }
 
-
-
     public void aStar(String heuristic) {
 
         if (isSolvable(initialState.getState())) {
 
-            List<int[]> visitedNodes = new ArrayList<>(); //An array list that cointains all the nodes that have already been visited
-            List<int[]> newNodes;  //An array list that will store all the successor nodes of the current node.
-            Comparator<Node> queueComparator = new NodeCostComparator(); //A comparator for the priority queue to ensure that we enqueue the node with the least cost.
-            PriorityQueue<Node> priorityQueue = new PriorityQueue<>(10, queueComparator);
-            Node currentNode = initialState;  //the root node is the initial state of the puzzle
+            HashMap<String, Node> visitedNodes = new HashMap<>(); //Cointains all the nodes that have already been visited
+            List<Node> newNodes;                                  //Stores all the successor nodes of the current node.
+            Comparator<Node> queueComparator = new NodeCostComparator(); //Ensures that the nodes with the lowest cost are at the front of the queue
+            PriorityQueue<Node> priorityQueue = new PriorityQueue<>(100, queueComparator);
+            Node currentNode = initialState;
             currentNode.setGCost(0);
+            if (heuristic == Heuristic.MANHATTAN)
+                currentNode.setHCost(Heuristic.ManhattanDistance(initialState.getState(), boardSize));
+            if (heuristic == Heuristic.MISPLACEDTILE)
+                currentNode.setHCost(Heuristic.MisplacedTile(initialState.getState()));
+            priorityQueue.add(currentNode);
+            visitedNodes.put(currentNode.getAsString(), currentNode);
 
-            while (!Arrays.equals(currentNode.getState(), goalState)) {
-                visitedNodes.add(currentNode.getState());
-                newNodes = ExpandNodes.expandNodes(currentNode.getState()); //Gets all the succesors of the current node
+            while (!priorityQueue.isEmpty()) {
+
+                currentNode = priorityQueue.poll();
+
+                if (Arrays.equals(currentNode.getState(), goalState)) {
+
+                    break;
+                }
+
+                newNodes = ExpandNodes.expandNodes(currentNode.getState()); //Expanding the nodes form the current node
                 numberExpandedNodes += newNodes.size();
 
                 for (int i = 0; i < newNodes.size(); i++) {
 
-                    if (!isInList(visitedNodes, newNodes.get(i))) {// We don't enqueue a node if it has already been visited
+                    if (!visitedNodes.containsKey(newNodes.get(i).getAsString())) {//If the exapanded nodes haven't been visited, we calculate the cost and enqueue them
 
-                        visitedNodes.add(newNodes.get(i)); // If the node hasn't been visited, we add it to the visited nodes list.
-                        Node childNode = new Node(newNodes.get(i));
+                        Node childNode = newNodes.get(i);
                         childNode.setParent(currentNode);
+                        childNode.setGCost(childNode.getParent().getGCost() + 1);
+                        childNode.setHCost(0);
 
-                        if (heuristic.equals(Heuristic.MISPLACEDTILE)) {
-
-                            childNode.setHCost(Heuristic.MisplacedTile(childNode.getState())); //We calculate the distance to the goal state
-                            childNode.setGCost(childNode.getParent().getGCost() + 1); //the cost to the next state is always 1
-                            priorityQueue.add(childNode); //We add the node to the priority queue depending on the cost
-
-                        }
-
-                        if (heuristic.equals(Heuristic.MANHATTAN)) {
+                        if (heuristic == Heuristic.MANHATTAN) {
 
                             childNode.setHCost(Heuristic.ManhattanDistance(childNode.getState(), boardSize));
-                            childNode.setGCost(childNode.getParent().getGCost() + 1);
+                            visitedNodes.put(childNode.getAsString(), childNode);
                             priorityQueue.add(childNode);
+                        }
 
+                        if (heuristic == Heuristic.MISPLACEDTILE) {
+
+                            childNode.setHCost(Heuristic.MisplacedTile(childNode.getState()));
+                            visitedNodes.put(childNode.getAsString(), childNode);
+                            priorityQueue.add(childNode);
                         }
                     }
                 }
 
-                if (priorityQueue.size() > maxQueueNodes) {
-                    maxQueueNodes = priorityQueue.size();
-
-                }
-
-                currentNode = priorityQueue.poll(); // the new current node is the first node to dequeue from the queue
-                PrintResult.printCurrentState(currentNode.getState(), currentNode.getGCost(), currentNode.getHCost(), boardSize);
-
+                if (priorityQueue.size() > maxQueueNodes) maxQueueNodes = priorityQueue.size();
             }
 
-            System.out.println("Goal!!!");
+            PrintResult.printTrace(currentNode, initialState);
+            System.out.print("Goal!!!");
             PrintResult.printResult(numberExpandedNodes, maxQueueNodes, getDepth(currentNode));
-
         }
     }
 
-    public void uniformSearch() { //It is identical to aStar search, except for the costs. h_cost is hardcoded to 0.
+
+    public void uniformSearch() { //Uniform search is exactly the same as A* search, but h(n)=0
 
         if (isSolvable(initialState.getState())) {
 
-
-            List<int[]> visitedNodes = new ArrayList<>();
-            List<int[]> newNodes;
+            HashMap<String, Node> visitedNodes = new HashMap<>();
+            List<Node> newNodes;
             Comparator<Node> queueComparator = new NodeCostComparator();
-            PriorityQueue<Node> priorityQueue = new PriorityQueue<>(10, queueComparator);
+            PriorityQueue<Node> priorityQueue = new PriorityQueue<>(100, queueComparator);
             Node currentNode = initialState;
             currentNode.setGCost(0);
             currentNode.setHCost(0);
+            priorityQueue.add(currentNode);
+            visitedNodes.put(currentNode.getAsString(), currentNode);
 
+            while (!priorityQueue.isEmpty()) {
 
-            while (!Arrays.equals(currentNode.getState(), goalState)) {
-                visitedNodes.add(currentNode.getState());
+                currentNode = priorityQueue.poll();
+
+                if (Arrays.equals(currentNode.getState(), goalState)) {
+
+                    break;
+                }
+
                 newNodes = ExpandNodes.expandNodes(currentNode.getState());
                 numberExpandedNodes += newNodes.size();
 
                 for (int i = 0; i < newNodes.size(); i++) {
 
+                    if (!visitedNodes.containsKey(newNodes.get(i).getAsString())) {
 
-                    if (!isInList(visitedNodes, newNodes.get(i))) {
-
-                        visitedNodes.add(newNodes.get(i));
-                        Node childNode = new Node(newNodes.get(i));
+                        Node childNode = newNodes.get(i);
                         childNode.setParent(currentNode);
-                        childNode.setHCost(0);
                         childNode.setGCost(childNode.getParent().getGCost() + 1);
+                        childNode.setHCost(0);
+                        visitedNodes.put(childNode.getAsString(), childNode);
                         priorityQueue.add(childNode);
                     }
-
-
                 }
 
-                if (priorityQueue.size() > maxQueueNodes) {
-                    maxQueueNodes = priorityQueue.size();
-
-                }
-
-                currentNode = priorityQueue.poll();
-                PrintResult.printCurrentState(currentNode.getState(), currentNode.getGCost(), currentNode.getHCost(), boardSize);
-
-
+                if (priorityQueue.size() > maxQueueNodes) maxQueueNodes = priorityQueue.size();
             }
 
-            System.out.println("Goal!!!");
+            PrintResult.printTrace(currentNode, initialState);
+            System.out.print("Goal!!!");
             PrintResult.printResult(numberExpandedNodes, maxQueueNodes, getDepth(currentNode));
-
         }
-
-
     }
 
-
-    public static boolean isSolvable(int[] state) {  //Tests if the puzzle is solvable. The board width must be odd.
+    public static boolean isSolvable(int[] state) {  //Tests if the puzzle is solvable.
 
         int inversion = 0;
         int value;
         int blankRow = 0;
         int boardSize = (int) Math.sqrt(state.length);
-        for (int i = 0; i < state.length; i++) {
 
+        for (int i = 0; i < state.length; i++) {
 
             value = state[i];
             for (int j = i + 1; j < state.length; j++) {
 
                 if (value > state[j] && state[j] != 0) {
+
                     inversion += 1;
-
                 }
-                if (state[j] == 0) {
-                    blankRow = Math.floorDiv(j, boardSize);
 
+                if (state[j] == 0) {
+
+                    blankRow = Math.floorDiv(j, boardSize);
                 }
             }
-
-
         }
-
 
         if (boardSize % 2 != 0 && inversion % 2 != 0) {
+
             System.out.print("The problem is not solvable");
             return false;
         }
+
         if (boardSize % 2 == 0 && (inversion + blankRow) % 2 == 0) {
+
             System.out.print("The problem is not solvable");
             return false;
         }
+
         return true;
     }
 
-    public static boolean isInList(List<int[]> list, int[] elem) {  //Method used to see if a list of arrays contains a specific array
+    public int getDepth(Node node) { //Calcultes the depth of the soluction
 
-        for (final int[] item : list) {
-            if (Arrays.equals(item, elem)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public int getDepth(Node node) {
         int depth = 0;
+
         while (node.getParent() != null) {
+
             depth++;
             node = node.getParent();
         }
-        ;
+
         return depth;
     }
 
-    public void setGoalState() {
-
+    public void setGoalState() { //Sets the goal state for the 8, 15 and 25 puzzle
 
         switch (boardSize) {
+
             case 3:
                 goalState = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 0};
                 break;
+
             case 4:
                 goalState = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0};
                 break;
+
             case 5:
                 goalState = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0};
                 break;
+
             default:
                 System.out.println("Goal state not available");
+                goalState = initialState.getState();
                 break;
         }
-
-
     }
 }
+

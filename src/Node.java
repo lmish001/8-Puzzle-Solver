@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 /**
  * Created by eldgb on 15-Oct-16.
  */
@@ -30,6 +32,10 @@ public class Node {
 
     public int getHCost() {
         return h_cost;
+    }
+
+    public String getAsString() {
+        return Arrays.toString(state);
     }
 
     public void setGCost(int cost) {
