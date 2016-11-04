@@ -5,7 +5,7 @@ import java.util.Arrays;
  */
 public class Node {
 
-    private int[] state;
+    private int[] state;  //Position of the tiles
     private int h_cost;
     private int g_cost;
     private Node parentNode;

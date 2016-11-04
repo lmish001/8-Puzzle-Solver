@@ -16,8 +16,7 @@ public class Main {
 
         if (i == 1) {
 
-            int[] state = {8, 6, 7, 2, 5, 4, 3, 0, 1};
-
+            int[] state = {0, 4, 1, 5, 3, 2, 7, 8, 6};
             Node initialState = new Node(state);
             Search search = new Search(initialState);
             System.out.println("Enter your choice of algorithm\n" +
@@ -43,17 +42,17 @@ public class Main {
 
             int[] state = new int[9];
             System.out.println("Enter your puzzle, use a zero to represent the blank\n" +
-                    "Enter the first row, use space between numbers");
+                    "Enter the first row, use space between numbers. Press enter to continue.");
             for (int j = 0; j < 3; j++) {
                 state[j] = sc.nextInt();
             }
 
-            System.out.println("Enter the second row, use space between numbers");
+            System.out.println("Enter the second row, use space between numbers. Press enter to continue.");
             for (int j = 3; j < 6; j++) {
                 state[j] = sc.nextInt();
             }
 
-            System.out.println("Enter the third row, use space between numbers");
+            System.out.println("Enter the third row, use space between numbers. Press enter to continue.");
             for (int j = 6; j < 9; j++) {
                 state[j] = sc.nextInt();
             }

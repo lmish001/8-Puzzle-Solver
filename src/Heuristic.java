@@ -10,7 +10,7 @@ public class Heuristic {
 
         int totalCost = 0;
 
-        for (int i = 0; i < state.length - 1; i++) {
+        for (int i = 0; i < state.length; i++) {
             if (i + 1 != state[i] && state[i] != 0) {
                 totalCost += 1;
             }

@@ -7,15 +7,15 @@ import java.util.List;
 
 public class ExpandNodes {
 
-    public static List<Node> expandNodes(int[] currentState) {
+    public static List<Node> expandNodes(int[] currentState) {  //Calculates all the possible moves form the current state
 
-        List<Node> newNodes = new ArrayList<>(); //Contains all the succesor nodes of the node that is passed
+        List<Node> newNodes = new ArrayList<>(); //Contains all the successor nodes of the node that is passed
         int[] newState;
         Node nextNode;
         int boardSize = (int) Math.sqrt(currentState.length);
         int i = getIndex(currentState, 0);
-        int row = Math.floorDiv(i, boardSize); //Row where the blanck is
-        int column = i % boardSize; //Column where the blanck is
+        int row = Math.floorDiv(i, boardSize); //Row where the blank is
+        int column = i % boardSize; //Column where the blank is
 
         if (column != 0) {  // Move the blank left
 

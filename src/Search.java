@@ -26,7 +26,7 @@ public class Search {
             HashMap<String, Node> visitedNodes = new HashMap<>(); //Cointains all the nodes that have already been visited
             List<Node> newNodes;                                  //Stores all the successor nodes of the current node.
             Comparator<Node> queueComparator = new NodeCostComparator(); //Ensures that the nodes with the lowest cost are at the front of the queue
-            PriorityQueue<Node> priorityQueue = new PriorityQueue<>(100, queueComparator);
+            PriorityQueue<Node> priorityQueue = new PriorityQueue<>(queueComparator);
             Node currentNode = initialState;
             currentNode.setGCost(0);
             if (heuristic == Heuristic.MANHATTAN)
@@ -45,13 +45,14 @@ public class Search {
                     break;
                 }
 
-                newNodes = ExpandNodes.expandNodes(currentNode.getState()); //Expanding the nodes form the current node
-                numberExpandedNodes += newNodes.size();
+                newNodes = ExpandNodes.expandNodes(currentNode.getState()); //Expanding the nodes from the current node
+
 
                 for (int i = 0; i < newNodes.size(); i++) {
 
-                    if (!visitedNodes.containsKey(newNodes.get(i).getAsString())) {//If the exapanded nodes haven't been visited, we calculate the cost and enqueue them
+                    if (!visitedNodes.containsKey(newNodes.get(i).getAsString())) {//If the expanded nodes haven't been visited, we calculate the cost and enqueue them
 
+                        numberExpandedNodes += 1;
                         Node childNode = newNodes.get(i);
                         childNode.setParent(currentNode);
                         childNode.setGCost(childNode.getParent().getGCost() + 1);
@@ -90,7 +91,7 @@ public class Search {
             HashMap<String, Node> visitedNodes = new HashMap<>();
             List<Node> newNodes;
             Comparator<Node> queueComparator = new NodeCostComparator();
-            PriorityQueue<Node> priorityQueue = new PriorityQueue<>(100, queueComparator);
+            PriorityQueue<Node> priorityQueue = new PriorityQueue<>(queueComparator);
             Node currentNode = initialState;
             currentNode.setGCost(0);
             currentNode.setHCost(0);
@@ -107,12 +108,13 @@ public class Search {
                 }
 
                 newNodes = ExpandNodes.expandNodes(currentNode.getState());
-                numberExpandedNodes += newNodes.size();
+
 
                 for (int i = 0; i < newNodes.size(); i++) {
 
                     if (!visitedNodes.containsKey(newNodes.get(i).getAsString())) {
 
+                        numberExpandedNodes += 1;
                         Node childNode = newNodes.get(i);
                         childNode.setParent(currentNode);
                         childNode.setGCost(childNode.getParent().getGCost() + 1);
@@ -157,20 +159,20 @@ public class Search {
 
         if (boardSize % 2 != 0 && inversion % 2 != 0) {
 
-            System.out.print("The problem is not solvable");
+            System.out.print("The problem is not solvable. The board size is odd and the number of inversions is also odd");
             return false;
         }
 
         if (boardSize % 2 == 0 && (inversion + blankRow) % 2 == 0) {
 
-            System.out.print("The problem is not solvable");
+            System.out.print("The problem is not solvable. The board size is even and the sum of the inversions and the row with blank (from the bottom) is even");
             return false;
         }
 
         return true;
     }
 
-    public int getDepth(Node node) { //Calcultes the depth of the soluction
+    public int getDepth(Node node) { //Calcultes the depth of the solution
 
         int depth = 0;
 
