@@ -61,16 +61,16 @@ public class Search {
                         if (heuristic == Heuristic.MANHATTAN) {
 
                             childNode.setHCost(Heuristic.ManhattanDistance(childNode.getState(), boardSize));
-                            visitedNodes.put(childNode.getAsString(), childNode);
-                            priorityQueue.add(childNode);
+          
                         }
 
                         if (heuristic == Heuristic.MISPLACEDTILE) {
 
                             childNode.setHCost(Heuristic.MisplacedTile(childNode.getState()));
-                            visitedNodes.put(childNode.getAsString(), childNode);
-                            priorityQueue.add(childNode);
                         }
+                        
+                         visitedNodes.put(childNode.getAsString(), childNode);
+                         priorityQueue.add(childNode);
                     }
                 }
 
